@@ -48,7 +48,45 @@ function [nm_pac,nm_angle,st_stat]	= fn_trials_pac(vt_ampl,vt_phase,st_cnf)
 %                           correction - default: 'polyfix')
 %   - st_cnf.border:        Phase 'lag' to include around the phase window
 %                           (default: pi/6)
-
+% 
+% Example:
+% % Simulate coupled and uncupled data
+% fs = 250;t = 0:1/fs:900;
+% lowDat  = (5*sin(2*pi*0.8*t)).*(0.5*sin(2*pi*1e-4*t)+2);
+% highDat1 = 0.25*sin(2*pi*15*t).*((sin(2*pi*0.8*t))+1).*(0.15*sin(2*pi*1e-3*t)+2);
+% highDat2 = 0.25*sin(2*pi*15*t).*((sin(2*pi*0.5*t))+1).*(0.15*sin(2*pi*1e-3*t)+2);
+% highDat3 = 0.25*sin(2*pi*15*t).*((sin(2*pi*3.5*t))+1).*(0.15*sin(2*pi*1e-2*t)+2);
+% plot(t,lowDat + highDat1,t,lowDat + highDat2,t,lowDat + highDat3)
+% lowPhase = angle(hilbert(lowDat));
+% highAmp1 = abs(hilbert(highDat1));
+% highAmp2 = abs(hilbert(highDat2));
+% highAmp3 = abs(hilbert(highDat3));
+% markers  = sort(round(rand(120,1)*numel(lowPhase)));
+% markers(diff(markers) < 2 * fs) = [];
+% 
+% % Try default values
+% st_cnf = [];
+% st_cnf.markers = markers;
+% [nm_c1,nm_a1,st_st1]	= fn_trials_pac(highAmp1,lowPhase,st_cnf);
+% [nm_c2,nm_a2,st_st2]	= fn_trials_pac(highAmp2,lowPhase,st_cnf);
+% [nm_c3,nm_a3,st_st3]	= fn_trials_pac(highAmp3,lowPhase,st_cnf);
+% 
+% % Try different methods
+% st_cnf = [];
+% st_cnf.markers = markers;
+% st_cnf.method	= 'kl';
+% [nm_c1,nm_a1,st_st1]	= fn_trials_pac(highAmp1,lowPhase,st_cnf);
+% [nm_c2,nm_a2,st_st2]	= fn_trials_pac(highAmp2,lowPhase,st_cnf);
+% [nm_c3,nm_a3,st_st3]	= fn_trials_pac(highAmp3,lowPhase,st_cnf);
+% 
+% % Try different methods
+% st_cnf = [];
+% st_cnf.markers = markers;
+% st_cnf.method	= 'glm';
+% [nm_c1,nm_a1,st_st1]	= fn_trials_pac(highAmp1,lowPhase,st_cnf);
+% [nm_c2,nm_a2,st_st2]	= fn_trials_pac(highAmp2,lowPhase,st_cnf);
+% [nm_c3,nm_a3,st_st3]	= fn_trials_pac(highAmp3,lowPhase,st_cnf);
+% 
 %% GNU licence,
 % Copyright (C) <2020>  <Miguel Navarrete>
 % 

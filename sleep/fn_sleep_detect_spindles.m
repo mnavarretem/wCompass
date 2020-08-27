@@ -18,7 +18,7 @@ function [mx_eventLims,vt_centFreq,vt_eeg]	= fn_sleep_detect_spindles(...
 %   
 %   - st_cnf.minnumosc:	Minimum number of oscillations (default: 4)
 %   
-%   - st_cnf.timebounds:    [min,max] time duration in seconds (default: [0.3,3])
+%   - st_cnf.timebounds:[min,max] time duration in seconds (default: [0.3,3])
 % 
 %   - st_cnf.dynamics:	slow dynamics in seconds for spindle
 %                           thresholding (default: 30)
@@ -38,8 +38,8 @@ function [mx_eventLims,vt_centFreq,vt_eeg]	= fn_sleep_detect_spindles(...
 %   - st_cnf.rawEEG:	Raw EEG wheter the signal is filtered
 %                       beforehand
 %                           
-%   - st_cnf.method         Method for spindle detection ('adaptative',
-%                           'fixed'). 
+%   - st_cnf.method     Method for spindle detection ('adaptative',
+%                       'fixed'). 
 %
 
 %% GNU licence,
@@ -116,7 +116,7 @@ if ~isfield(st_cnf,'toFilter')
 end
 
 if ~isfield(st_cnf,'method')
-    st_cnf.method	= 'adapted';
+    st_cnf.method	= 'adaptative';
 end
 
 if ~isfield(st_cnf,'rms')
@@ -151,7 +151,7 @@ if st_cnf.toFilter
 
     ob_filter   = design(ob_filter,'equiripple');
 
-    vt_eeg	= fn_filterOffline(vt_eeg,ob_filter);
+    vt_eeg	= fn_filter_offline(vt_eeg,ob_filter);
 end
 
 %% Define auxiliary variables
@@ -188,7 +188,7 @@ if isempty(st_cnf.rms)
 end
 
 switch st_cnf.method
-    case 'adapted'
+    case 'adaptative'
 
         % Determine dynamics of spindle activity
         nm_windowFast   = round(nm_fSample * st_cnf.dynamics(1));

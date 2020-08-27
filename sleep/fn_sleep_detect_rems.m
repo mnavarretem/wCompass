@@ -101,9 +101,9 @@ if size(mx_eogSignal,1) < size(mx_eogSignal,2)
 end
 
 if st_cnf.toFilter
-    st_filterREM	= fn_designIIRfilter(st_cnf.fsampling,st_cnf.freqband,...
+    st_filterREM	= fn_filter_designIIR(st_cnf.fsampling,st_cnf.freqband,...
                     [st_cnf.freqband(1) - 0.1,st_cnf.freqband(1) + 1]);
-    mx_eogSignal	= fn_filterOffline(mx_eogSignal,st_filterREM);
+    mx_eogSignal	= fn_filter_offline(mx_eogSignal,st_filterREM);
 end
 
 %%	- Detect putative REM

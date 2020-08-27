@@ -181,12 +181,14 @@ for kk = 1:numel(st_cnf.markers)
                 
         % Find empty bins and make linear interpolation depending on
         % neighborhoods
-        vt_idx	= vt_cAmpl == 0;
+        vt_idx	= vt_cAmpl == 0 | isnan(vt_cAmpl);
 
         if any(vt_idx)
             vt_line     = find(vt_idx == 0);        
             vt_cAmpl	= interp1(...
-                        vt_phBins(vt_line),vt_cAmpl(vt_line),vt_phBins);        
+                        vt_phBins(vt_line),vt_cAmpl(vt_line),vt_phBins,...
+                        'linear','extrap');         
+            vt_cAmpl    = vt_cAmpl(1:end-1);
         end
         vt_phBins       = fn_edge2bin(vt_phBins);
         vt_aTrl{kk}     = vt_cAmpl(:)';
@@ -200,6 +202,6 @@ for kk = 1:numel(st_cnf.markers)
         
         vt_aTrl{kk}     = vt_trialAmp(:)';
         vt_phTrl{kk}    = vt_trialPh(:)';
-    end
+    end    
 end
 

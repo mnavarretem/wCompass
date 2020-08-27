@@ -150,7 +150,7 @@ if st_Cnf.toFilter
 
     ob_filter   = design(ob_filter,'equiripple');
 
-    vt_eeg	= fn_filterOffline(vt_eeg,ob_filter);
+    vt_eeg	= fn_filter_offline(vt_eeg,ob_filter);
 end
 
 %% Define auxiliary variables

@@ -125,9 +125,9 @@ end
 vt_eegSignal   = vt_eegSignal(:);
 
 if st_cnf.toFilter
-    st_FilterSO     = fn_designIIRfilter(st_cnf.fsampling,st_cnf.freqband,...
+    st_FilterSO     = fn_filter_designIIR(st_cnf.fsampling,st_cnf.freqband,...
                     [st_cnf.freqband(1) - 0.3,st_cnf.freqband(1) + 0.5]);
-    vt_eegSignal	= fn_filterOffline(vt_eegSignal,st_FilterSO);
+    vt_eegSignal	= fn_filter_offline(vt_eegSignal,st_FilterSO);
 end
 
 %%	- Detect putative SO

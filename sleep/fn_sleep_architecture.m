@@ -76,6 +76,11 @@ nm_hEpoch   = st_hypno.epoch;
 
 %% Compute sleep values
 
+if vt_hypno(end) ~= 0
+    vt_hypno(end+1)	= 0;
+    vt_hTime(end+1)	= vt_hTime(end) + nm_hEpoch;
+end
+
 % Set sleep interval
 vt_cId 	=  vt_hypno == 0;
 vt_diff	= diff([0,vt_cId,0]);
