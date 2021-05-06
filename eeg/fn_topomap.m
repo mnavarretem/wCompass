@@ -8,9 +8,9 @@
 %   vt_data = vector of values at the corresponding locations.
 %   st_cfg = structure of parameters
 %   st_cfg.fileloc     -  file with vector locations
-%   st_cfg.channels	-  cell vector of strings with the names of channles
+%   st_cfg.channels     -  cell vector of strings with the names of channles
 %                       in the same order of vt_data 
-%   st_cfg.colormap	-  any sized colormap
+%   st_cfg.colormap     -  any sized colormap
 %   st_cfg.gridscale	-  scaling grid size {default 100}
 %   st_cfg.maplimits	- 'absmax' +/- the absolute-max 
 %                       'maxmin' scale to data range

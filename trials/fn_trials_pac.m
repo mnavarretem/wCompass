@@ -281,8 +281,9 @@ end
 %--------------------------------------------------------------------------
     function [nm_c,nm_a]= fn_local_umvl(vt_am,vt_ph)
         % (Kutil 2012)
-        vt_mpac	= (vt_am .* exp(1i*vt_ph)).^2;
-        nm_c	= abs(sum(vt_mpac)) ./ sum(abs(vt_mpac));
+        vt_mpac	= sum(abs(vt_am .* exp(1i*vt_ph))).^2;
+        nm_c	= vt_mpac ./ sum(vt_am);
+        nm_c    = sqrt((1/(sum(vt_am) - 1)).*(nm_c - 1));
         % Compute preferred angle
         nm_a    = angle(sum(vt_am .* exp(1i*vt_ph)));
         

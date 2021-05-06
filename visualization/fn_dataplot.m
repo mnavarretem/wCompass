@@ -37,7 +37,7 @@ function st_handles	= fn_dataplot(mx_data,st_pref)
 %                                   matrix as the values in mx_data.
 %       st_pref.dot.fillDots:       Fill dots (default: false)
 %       st_pref.dot.jitter:         Apply dot jitter (default: true)
-%       st_pref.dot.jitterWidth:	Relative jitter width (default: 0.9)
+%       st_pref.dot.jitterWidth:	Relative jitter width (default: 0.1)
 %       st_pref.dot.connect:        Connect dots between levels of the same
 %                                   factor/category 
 %       st_pref.dot.connectColor:	Matlab color vector or string
@@ -239,7 +239,7 @@ if st_pref.dotplot
         st_dot.jitter	= true;
     end
     if ~isfield(st_dot,'jitterWidth')
-        st_dot.jitterWidth	= 0.9;
+        st_dot.jitterWidth	= 0.1;
     end
     if ~isfield(st_dot,'marker')
         st_dot.marker     = '.';
@@ -653,6 +653,7 @@ if st_pref.dotplot
                 
             else
                 mx_xLevels(:,lv)	= nm_xTick;
+                st_dot.jitterWidth  = 0.1 * st_dot.meanSize;
                 
             end
         end
@@ -768,7 +769,7 @@ end
     % Display dot plot diagram
     
     nm_dotsLim      = st_pref.Section * st_dot.jitterWidth;
-    
+        
     if ~st_dot.connect
         st_dot.connectLine = 'none';
     end
@@ -781,6 +782,7 @@ end
         for pp = 1:size(mx_dval,2)
             
             if st_dot.fillDots
+                
                 vt_fill = st_dot.color{pp,fd};
             else
                 vt_fill = 'none';

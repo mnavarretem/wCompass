@@ -119,24 +119,32 @@ end
 
 % Compute REM info
 if ~isempty(vt_rems)
-    nm_REMstage = 5;
-    vt_nStage	= find(vt_hypno == nm_REMstage);
+    nm_REMstage         = 5; % stage
+    nm_remEpoch_tm      = 30; % seconds
+    nm_countThreshold   = 1;
     
-    if vt_nStage(end) == numel(vt_hTime)
+    vt_timeREM  = 0:nm_remEpoch_tm:vt_hTime(end);
+    vt_timeREM  = vt_timeREM(:);
+    % resample to 2s hypnogram
+    vt_hypnoREM = interp1(vt_hTime,single(vt_hypno),vt_timeREM,'previous','extrap');
+    
+    vt_nStage	= find(vt_hypnoREM == nm_REMstage);
+    
+    if vt_nStage(end) == numel(vt_timeREM)
         nm_end = vt_nStage(end);
     else
         nm_end = vt_nStage(end) + 1;        
     end
     
-    vt_remTime  = [vt_hTime(vt_nStage);vt_hTime(nm_end)];
+    vt_remTime  = [vt_timeREM(vt_nStage);vt_timeREM(nm_end)];
     vt_remTime  = unique(vt_remTime);
     vt_eCounts	= histcounts(vt_rems,vt_remTime);
     
-    vt_inPhasic = vt_eCounts > 0;
-    vt_inTonic  = vt_eCounts == 0;
+    vt_inPhasic = vt_eCounts > nm_countThreshold;
+    vt_inTonic  = vt_eCounts <= nm_countThreshold;
     
-    nm_phasicTime	= nm_hEpoch * sum(vt_inPhasic);
-    nm_tonicTime	= nm_hEpoch * sum(vt_inTonic);
+    nm_phasicTime	= nm_remEpoch_tm * sum(vt_inPhasic);
+    nm_tonicTime	= nm_remEpoch_tm * sum(vt_inTonic);
     
 else
     nm_phasicTime = nan;
@@ -169,4 +177,3 @@ st_sleep.arousaltime	= nm_arslTime;
 
 st_sleep.REMphasic	= nm_phasicTime;
 st_sleep.REMtonic	= nm_tonicTime;
-

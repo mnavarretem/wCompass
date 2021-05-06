@@ -286,6 +286,8 @@ switch lower(st_cfg.imageMethod)
 end
 
 if st_cfg.colorbar
+    ch_axeUnits	= get(st_cfg.parent,'Units');
+    set(st_cfg.parent,'Units','normalized');
     vt_axePos	= get(st_cfg.parent,'Position');
     switch st_cfg.cbarpos
         case 'up'
@@ -345,8 +347,10 @@ if st_cfg.colorbar
             vt_cPosition(1)	= vt_axePos(1) + vt_axePos(3) + 0.3*vt_cPosition(3);
     end    
     
-    vt_cPosition(3)  = 0.4*vt_cPosition(3);
+    vt_cPosition(3)  = 0.75*vt_cPosition(3);
     set(ob_hAxis(2),'Position',vt_cPosition)
+    
+    set(st_cfg.parent,'Units',ch_axeUnits);
 end
 
 if st_cfg.invert
