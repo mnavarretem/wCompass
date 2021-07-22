@@ -15,13 +15,11 @@ else
 end
 
 st_stat	= fn_clustertest(mx_stim,mx_cont,st_cfg);
-        
-if isempty(st_stat.idClust)
-    mx_signif   = [];
-else
-    vt_id       = vertcat(st_stat.idClust{:});     
-    mx_signif   = false(size(st_stat.tValues));
-    mx_signif(vt_id) = true;
+mx_sgnf	= false(size(st_stat.tValues));
+
+if ~isempty(st_stat.idClust)   
+    vt_id           = vertcat(st_stat.idClust{:});     
+    mx_sgnf(vt_id)	= true;
 end
 
 st_out.cont         = single(mx_cont);
@@ -37,4 +35,4 @@ st_out.pCluster     = st_stat.pCluster;
 st_out.pCrtClust	= st_stat.pCrtClust;
 st_out.tThres       = st_stat.tThres;
 st_out.alphaThr     = st_stat.alphaThr;
-st_out.signif       = logical(mx_signif);
+st_out.signif       = logical(mx_sgnf);

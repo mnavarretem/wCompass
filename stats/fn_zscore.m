@@ -1,4 +1,4 @@
-function mx_m = fn_zscore(mx_x,nm_dim,nm_robust)
+function [mx_m,st_stat] = fn_zscore(mx_x,nm_dim,nm_robust)
 % mx_m = fn_zscore(mx_x,nm_dim,nm_robust) computes the zscore along nm_dim 
 % dimmension with nm_robust indicating the use of fobust statistics 
 % (defalut = 0, 'no robust')
@@ -32,9 +32,20 @@ if nm_robust
     mx_mad      = median(abs(mx_x - mx_median),nm_dim,'omitnan');
 
     mx_m	= (mx_x - mx_median) ./ (mx_mad * 1.4826);
+    
+    nm_zcenter      = mx_median;
+    nm_zdeviation	= mx_mad;
 else    
     mx_mean	= mean(mx_x,nm_dim,'omitnan');
     mx_std	= std(mx_x,0,nm_dim,'omitnan');
 
     mx_m	= (mx_x - mx_mean) ./ mx_std;
+    
+    nm_zcenter      = mx_mean;
+    nm_zdeviation	= mx_std;
+end
+
+if nargout > 1
+    st_stat.zcenter         = nm_zcenter;
+    st_stat.zdeviation	= nm_zdeviation;
 end

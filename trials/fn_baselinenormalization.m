@@ -23,8 +23,8 @@ if vt_baseline(2) > size(mx_input, 2)
 end
 
 %% Compute baseline input values
-vt_mean	= mean(mx_input(:,vt_baseline(1):vt_baseline(2),:),2);
-vt_std	= std(mx_input(:,vt_baseline(1):vt_baseline(2),:),0,2);
+vt_mean	= mean(mx_input(:,vt_baseline(1):vt_baseline(2),:),2,'omitnan');
+vt_std	= std(mx_input(:,vt_baseline(1):vt_baseline(2),:),0,2,'omitnan');
 
 switch lower(ch_method)
     case {'zscore','z'}

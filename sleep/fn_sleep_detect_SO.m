@@ -147,9 +147,7 @@ end
 
 st_cnf	= rmfield(st_cnf,{'hypnogram','stage'});
 
-% vt_extrema   = vt_extrema(vt_validStage(vt_Lo));
 vt_extrema  = sort(vertcat(vt_Lo(:),vt_Hi(:)));
-% vt_extrema  = sort(vertcat(vt_Lo(:)));
 vt_extrema  = vt_extrema(vt_validStage(vt_extrema));
 
 switch st_cnf.method
@@ -165,15 +163,14 @@ switch st_cnf.method
         st_cnf.threshold    = -prctile(abs(vt_values),...
                             st_cnf.threshold); % fix percentile
         st_cnf.minthresh    = - prctile(vt_values,...
-                            100*erf(3.5/sqrt(2)));
+                            100*erf(3.75/sqrt(2)));
         
     case 'percentile'
         vt_values           = -vt_eegSignal(vt_extrema);
         st_cnf.threshold    = -prctile(abs(vt_values),...
-                            100*erf(1.5/sqrt(2))); % percentile 90
-%                             100*erf(1.6448/sqrt(2))); % percentile 90
+                            100*erf(1.66/sqrt(2))); % percentile 90
         st_cnf.minthresh    = - prctile(vt_values,...
-                            100*erf(3.5/sqrt(2)));
+                            100*erf(3.75/sqrt(2)));
         
     case 'parametric'
         vt_values           = -vt_eegSignal(vt_extrema);
@@ -193,13 +190,7 @@ vt_Lo   = vt_Lo(vt_validStage(vt_Lo));
 vt_Lo	= vt_Lo(vt_eegSignal(vt_Lo) < st_cnf.threshold);
 vt_Lo	= vt_Lo(vt_eegSignal(vt_Lo) > st_cnf.minthresh);
 
-if st_cnf.threshold > -10 && strcmpi(st_cnf.method,'threshold')
-    vt_values	= -vt_eegSignal(vt_extrema);
-    nm_thres    = -prctile(abs(vt_values),...
-                            80); % fix percentile
-else
-    nm_thres	= st_cnf.threshold;
-end
+nm_thres	= st_cnf.threshold;
 
 %%	- Select SOs
 

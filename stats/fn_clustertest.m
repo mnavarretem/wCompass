@@ -1,12 +1,12 @@
 function st_out =	fn_clustertest(mx_X,mx_Y,st_cfg)
-% Descripption to complete
+% Description to complete
 
 %   Example:
 %       F1 = [36 60 39]; F2 = [73 55 70];
-%       vt_pCluster = f_PermTestERP(F1,F2)
+%       vt_pCluster = fn_clustertest(F1,F2)
 %       % Returns:
 %       %   vt_pCluster = 0.2
-%       vt_pCluster = f_PermTestERP(F1,F2,1)
+%       vt_pCluster = fn_clustertest(F1,F2,1)
 %       % Returns:
 %       %   vt_pCluster = 0.1
 %
@@ -177,6 +177,7 @@ end
 %:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 %   A. Obtain stats of original distributions
 st_out            = fn_getstats(mx_X,mx_Y);
+
 st_out.tThres     = st_cfg.tThres;
 st_out.alphaThr   = nm_alphaThr;
 
@@ -252,23 +253,41 @@ if ischar(st_cfg.alpha)
     switch lower(st_cfg.alpha)
         case 'bonferroni'
             st_cfg.alpha	= nm_alpha/numel(vt_pCluster);
+            vt_hCluster     = vt_pCluster < st_cfg.alpha;
+            
         case 'holm'
-            vt_hCluster     = vt_pCluster > nm_alpha./...
-                            (numel(vt_pCluster)+1-(1:numel(vt_pCluster)))';
+            vt_alpha        = nm_alpha./...
+                            (numel(vt_pCluster)-(1:numel(vt_pCluster))+1)';
+            vt_hCluster     = vt_pCluster <= vt_alpha;
                         
             if isempty(vt_pCluster(vt_hCluster))
                 st_cfg.alpha    = nm_alpha;
             else
-                st_cfg.alpha    = min(vt_pCluster(vt_hCluster));
+                st_cfg.alpha    = max(vt_pCluster(vt_hCluster));
             end
+            vt_hCluster     = vt_pCluster <= st_cfg.alpha;
+            
+            
         case 'fdr'
-            [vt_hCluster,st_cfg.alpha]	= fdr_bh(vt_pCluster); %#ok<ASGLU>
+            [vt_hCluster,st_cfg.alpha]	= fdr_bh(vt_pCluster); 
+            vt_hCluster     = logical(vt_hCluster);
+            
+        case 'none'
+            st_cfg.alpha	= nm_alpha;
+            vt_hCluster     = vt_pCluster < st_cfg.alpha;
+            
         otherwise
             st_cfg.alpha	= nm_alpha;
+            vt_hCluster     = vt_pCluster < st_cfg.alpha;
     end
+elseif isnumeric(st_cfg.alpha)
+    st_cfg.alpha	= nm_alpha;
+    vt_hCluster     = vt_pCluster < st_cfg.alpha;
+else
+    st_cfg.alpha	= nm_alpha;
+    vt_hCluster     = false(size(vt_pCluster));
+    
 end
-
-vt_hCluster     = vt_pCluster < st_cfg.alpha;
 
 st_out.idClust	= st_out.idClust(vt_hCluster);
 st_out.szClust	= st_out.szClust(vt_hCluster);

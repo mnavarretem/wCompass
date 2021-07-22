@@ -52,6 +52,7 @@ for kk =  1:nm_nLines
 end
 
 if isfield(st_cfg,'signif')
+    st_cfg.signif           = logical(st_cfg.signif);
     mx_signif               = nan(size(st_cfg.xAxes));
     mx_signif(st_cfg.signif)= 1;
     
